@@ -1,17 +1,35 @@
-import usePostStore from "../stores/usePostStore";
+import { useContext } from "react";
+import { PostsContext } from "../stores/PostContext";
+import styled from "styled-components";
+
+const PostListDiv = styled.div`
+  display:flex;
+
+`
 
 const PostList = () => {
-  const posts = usePostStore((state)=>state.posts);
+  const context = useContext(PostsContext);
+  if (!context) {
+    throw new Error("wrong!");
+  }
+
+  const { posts } = context;
 
   return (
-    <div>
-      {posts.map((post) => (
-        <div key={post.postId}>
-          <h2>{post.postTitle}</h2>
-          <p>{post.postContent}</p>
-        </div>
-      ))}
-    </div>
+    <PostListDiv>
+      <ul>
+        {posts.map((post) => (
+          <>
+          <div>
+            <h3>{post.postTitle}</h3>
+            <p>{post.postContent}</p>
+            <small>{`작성일: ${new Date(post.postDate).toLocaleString()}`}</small>
+          </div>
+          </>
+        ))}
+      </ul>
+      
+    </PostListDiv>
   );
 };
 

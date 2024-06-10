@@ -1,11 +1,19 @@
 import Form from "../component/Form";
+import styled from "styled-components";
+
+const PostingDiv = styled.div`
+  
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+`
 
 const PostingPage = () => {
   return (
-    <>
-      <h2>글 쓰기</h2>
+    <PostingDiv>
+      <h2>글 작성하기</h2>
       <Form />
-    </>
+    </PostingDiv>
   );
 };
 
