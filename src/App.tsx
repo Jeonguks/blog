@@ -6,8 +6,8 @@ import Header from "./component/Header.tsx";
 import PostingPage from "./page/PostingPage.tsx";
 import PostListPage from "./page/PostListPage.tsx";
 
-function App() {
 
+function App() {
 
   return (
     <>
