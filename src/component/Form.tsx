@@ -1,25 +1,18 @@
-import { ChangeEvent, useState, useRef } from "react";
-
-const sampleData = [
-  {
-    postId: 0,
-    postDate: new Date().getTime(),
-    postTitle: "제목테스트",
-    postContent: "내용테스트",
-  },
-  {
-    postId: 1,
-    postDate: new Date().getTime(),
-    postTitle: "제목테스트2",
-    postContent: "내용테스트22",
-  },
-];
+import { ChangeEvent, useState, useRef, useContext } from "react";
+import { PostsContext } from "../stores/PostContext";
 
 const Form = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const [posts, setPost] = useState(sampleData);
   const postIdRef = useRef(2);
+
+  const context = useContext(PostsContext);
+
+  if (!context) {
+    throw new Error("Form must be used within a PostsProvider");
+  }
+
+  const { addPost } = context;
 
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,7 +24,7 @@ const Form = () => {
       postContent: postContent,
     };
 
-    setPost([...posts, newPost]);
+    addPost(newPost);
     alert("작성완료!");
     setPostTitle("");
     setPostContent("");
