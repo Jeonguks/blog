@@ -17,13 +17,13 @@ const sampleData: Post[] = [
     postId: 0,
     postDate: new Date().getTime(),
     postTitle: "제목테스트",
-    postContent: "내용테스트",
+    postContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est suscipit hic eum quos ut voluptatibus accusantium! Incidunt in deleniti ullam quibusdam. Esse quaerat dolor iste exercitationem praesentium, eius aut blanditiis.",
   },
   {
     postId: 1,
     postDate: new Date().getTime(),
     postTitle: "제목테스트2",
-    postContent: "내용테스트22",
+    postContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat explicabo aliquid aliquam quis provident temporibus iure, odit natus fugiat, esse veniam voluptate doloribus at iusto officiis ducimus. Nisi, minus delectus.",
   },
 ];
 
