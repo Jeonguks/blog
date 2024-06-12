@@ -47,7 +47,7 @@ const PostDispatchContext = createContext<
 const PostProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, dispatch] = useReducer(reducer, []);
-  const postIdRef = useRef(0);
+  const deletedPostsCountRef = useRef(0);
 
   useEffect(() => {
     const storedData = localStorage.getItem("posts");
@@ -61,26 +61,21 @@ const PostProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    let maxId = 0;
-    parsedData.forEach((item) => {
-      if (item.postId > maxId) {
-        maxId = item.postId;
-      }
-    });
-    postIdRef.current = maxId + 1;
-
     dispatch({ type: "INIT", data: parsedData });
     setIsLoading(false);
   }, []);
 
   const addPost = (post: Post) => {
+    const nextPostId = posts.length;
+    const newPost = { ...post, postId: nextPostId };
     dispatch({
       type: "CREATE",
-      data: { ...post, postId: postIdRef.current++ },
+      data: newPost,
     });
   };
 
   const deletePost = (postId: number) => {
+    deletedPostsCountRef.current += 1;
     dispatch({ type: "DELETE", id: postId });
   };
 

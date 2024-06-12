@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useRef } from "react";
+import { ChangeEvent, useState } from "react";
 import { usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
 
@@ -18,9 +18,9 @@ const TextareaTag = styled.textarea`
 `;
 
 const Form = () => {
+  let idRef = Number(localStorage.getItem("POSTID"));
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const postIdRef = useRef(0);
 
   const dispatch = usePostDispatch();
 
@@ -32,7 +32,7 @@ const Form = () => {
     e.preventDefault();
 
     const newPost = {
-      postId: postIdRef.current++,
+      postId: idRef,
       postDate: new Date().getTime(),
       postTitle: postTitle,
       postContent: postContent,
@@ -40,8 +40,10 @@ const Form = () => {
 
     dispatch({ type: "CREATE", data: newPost });
     alert("작성완료!");
+    idRef+=1;
+    localStorage.setItem("POSTID",String(idRef))
     setPostTitle("");
-    setPostContent("");
+    setPostContent("")
   };
 
   return (
