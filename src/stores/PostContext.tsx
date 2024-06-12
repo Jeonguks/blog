@@ -1,4 +1,12 @@
-import { createContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useRef,
+  useContext,
+} from "react";
 
 interface Post {
   postId: number;
@@ -7,40 +15,98 @@ interface Post {
   postContent: string;
 }
 
-interface PostsContextProps {
-  posts: Post[];
-  addPost: (post: Post) => void;
+type PostAction =
+  | { type: "INIT"; data: Post[] }
+  | { type: "CREATE"; data: Post }
+  | { type: "DELETE"; id: number };
+
+function reducer(state: Post[], action: PostAction): Post[] {
+  let nextState: Post[];
+  switch (action.type) {
+    case "INIT":
+      nextState = action.data;
+      break;
+    case "CREATE":
+      nextState = [action.data, ...state];
+      break;
+    case "DELETE":
+      nextState = state.filter((item) => item.postId !== action.id);
+      break;
+    default:
+      return state;
+  }
+  localStorage.setItem("posts", JSON.stringify(nextState));
+  return nextState;
 }
 
-const sampleData: Post[] = [
-  {
-    postId: 0,
-    postDate: new Date().getTime(),
-    postTitle: "제목테스트",
-    postContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est suscipit hic eum quos ut voluptatibus accusantium! Incidunt in deleniti ullam quibusdam. Esse quaerat dolor iste exercitationem praesentium, eius aut blanditiis.",
-  },
-  {
-    postId: 1,
-    postDate: new Date().getTime(),
-    postTitle: "제목테스트2",
-    postContent: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat explicabo aliquid aliquam quis provident temporibus iure, odit natus fugiat, esse veniam voluptate doloribus at iusto officiis ducimus. Nisi, minus delectus.",
-  },
-];
-
-const PostsContext = createContext<PostsContextProps | undefined>(undefined);
+const PostStateContext = createContext<Post[] | undefined>(undefined);
+const PostDispatchContext = createContext<
+  React.Dispatch<PostAction> | undefined
+>(undefined);
 
 const PostProvider = ({ children }: { children: ReactNode }) => {
-  const [posts, setPosts] = useState<Post[]>(sampleData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [posts, dispatch] = useReducer(reducer, []);
+  const postIdRef = useRef(0);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("posts");
+    if (!storedData) {
+      setIsLoading(false);
+      return;
+    }
+    const parsedData: Post[] = JSON.parse(storedData);
+    if (!Array.isArray(parsedData)) {
+      setIsLoading(false);
+      return;
+    }
+
+    let maxId = 0;
+    parsedData.forEach((item) => {
+      if (item.postId > maxId) {
+        maxId = item.postId;
+      }
+    });
+    postIdRef.current = maxId + 1;
+
+    dispatch({ type: "INIT", data: parsedData });
+    setIsLoading(false);
+  }, []);
 
   const addPost = (post: Post) => {
-    setPosts((prevPosts) => [...prevPosts, post]);
+    dispatch({
+      type: "CREATE",
+      data: { ...post, postId: postIdRef.current++ },
+    });
+  };
+
+  const deletePost = (postId: number) => {
+    dispatch({ type: "DELETE", id: postId });
   };
 
   return (
-    <PostsContext.Provider value={{ posts, addPost }}>
-      {children}
-    </PostsContext.Provider>
+    <PostStateContext.Provider value={posts}>
+      <PostDispatchContext.Provider value={dispatch}>
+        {!isLoading && children}
+      </PostDispatchContext.Provider>
+    </PostStateContext.Provider>
   );
 };
 
-export { PostProvider, PostsContext };
+const usePosts = () => {
+  const context = useContext(PostStateContext);
+  if (context === undefined) {
+    throw new Error("usePosts must be used within a PostProvider");
+  }
+  return context;
+};
+
+const usePostDispatch = () => {
+  const context = useContext(PostDispatchContext);
+  if (context === undefined) {
+    throw new Error("usePostDispatch must be used within a PostProvider");
+  }
+  return context;
+};
+
+export { PostProvider, usePosts, usePostDispatch };

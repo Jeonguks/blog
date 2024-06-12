@@ -1,5 +1,5 @@
-import { ChangeEvent, useState, useRef, useContext } from "react";
-import { PostsContext } from "../stores/PostContext";
+import { ChangeEvent, useState, useRef } from "react";
+import { usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
 
 const FormTag = styled.form`
@@ -12,7 +12,7 @@ const InputTag = styled.input`
   font-size: 15px;
   font-weight: bold;
   height: 30px;
-`
+`;
 const TextareaTag = styled.textarea`
   height: 100px;
 `;
@@ -20,15 +20,13 @@ const TextareaTag = styled.textarea`
 const Form = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
-  const postIdRef = useRef(2);
+  const postIdRef = useRef(0);
 
-  const context = useContext(PostsContext);
+  const dispatch = usePostDispatch();
 
-  if (!context) {
+  if (!dispatch) {
     throw new Error("Form must be used within a PostsProvider");
   }
-
-  const { addPost } = context;
 
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +38,7 @@ const Form = () => {
       postContent: postContent,
     };
 
-    addPost(newPost);
+    dispatch({ type: "CREATE", data: newPost });
     alert("작성완료!");
     setPostTitle("");
     setPostContent("");

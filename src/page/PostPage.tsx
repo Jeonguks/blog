@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import { PostsContext } from "../stores/PostContext";
+import { usePosts,usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
 
 const TitleWrapper = styled.div`
@@ -21,17 +20,22 @@ const ContentWrapper = styled.div`
 
 const PostPage = () => {
   const params = useParams();
-  const context = useContext(PostsContext);
+  const posts = usePosts();
+  const dispatch = usePostDispatch();
 
-  if (!context) {
+  if (!posts) {
     return <h1>데이터를 불러오는 중입니다...</h1>;
   }
-
-  const { posts } = context;
-
+ 
   const filteredData = posts.filter(
     (post) => post.postId === Number(params.postId)
   );
+
+  const handleDelete = () => {
+    if (filteredData.length > 0) {
+      dispatch({ type: "DELETE", id: filteredData[0].postId });
+    }
+  };
 
   return (
     <>
@@ -42,6 +46,7 @@ const PostPage = () => {
             <small>{`작성일: ${new Date(
               filteredData[0].postDate
             ).toLocaleString()}`}</small>
+            <button onClick={handleDelete}>게시글 삭제하기</button>
           </TitleWrapper>
           <ContentWrapper>
             <p>{filteredData[0].postContent}</p>

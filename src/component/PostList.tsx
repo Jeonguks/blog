@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { PostsContext } from "../stores/PostContext";
+import { usePosts } from "../stores/PostContext"; // Updated import
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -7,6 +6,7 @@ const PostListWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
 const PostContentDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,32 +18,29 @@ const PostContentDiv = styled.div`
   & > * {
     margin: 5px;
   }
-  & > a > h3{
+  & > a > h3 {
     margin: 0px;
   }
 `;
+
 const PostList = () => {
-  const context = useContext(PostsContext);
-  if (!context) {
-    throw new Error("wrong!");
+  const posts = usePosts();
+
+  if (!posts) {
+    return <div>데이터를 불러오는 중입니다...</div>;
   }
 
-  const { posts } = context;
   return (
     <PostListWrapper>
       <ul>
         {posts.map((post) => (
-          <>
-            <PostContentDiv>
-              <Link to={`/post/${post.postId}`}>
-                <h3>{post.postTitle}</h3>
-              </Link>
-              <p>{post.postContent}</p>
-              <small>{`작성일: ${new Date(
-                post.postDate
-              ).toLocaleString()}`}</small>
-            </PostContentDiv>
-          </>
+          <PostContentDiv key={post.postId}>
+            <Link to={`/post/${post.postId}`}>
+              <h3>{post.postTitle}</h3>
+            </Link>
+            <p>{post.postContent}</p>
+            <small>{`작성일: ${new Date(post.postDate).toLocaleString()}`}</small>
+          </PostContentDiv>
         ))}
       </ul>
     </PostListWrapper>
