@@ -8,6 +8,7 @@ import PostListPage from "./page/PostListPage.tsx";
 import { PostProvider } from "./stores/PostContext.tsx";
 import PostPage from "./page/PostPage.tsx";
 import TestPage from "./page/TestPage.tsx";
+import LoginPage from "./page/LoginPage.tsx";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <PostProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/write" element={<PostingPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/list" element={<PostListPage />} />
+          <Route path="/post" element={<PostListPage />} />
           <Route path="/post/:postId" element={<PostPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="*" element={<NotFoundPage />} />

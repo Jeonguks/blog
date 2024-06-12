@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { usePosts,usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
 
@@ -22,6 +22,7 @@ const PostPage = () => {
   const params = useParams();
   const posts = usePosts();
   const dispatch = usePostDispatch();
+  const nav = useNavigate();
 
   if (!posts) {
     return <h1>데이터를 불러오는 중입니다...</h1>;
@@ -33,7 +34,11 @@ const PostPage = () => {
 
   const handleDelete = () => {
     if (filteredData.length > 0) {
+      if(confirm("게시물을 정말로 삭제하시겠습니까?")){
       dispatch({ type: "DELETE", id: filteredData[0].postId });
+      alert("게시글이 삭제 완료 되었습니다.")
+      nav("/post")
+      }
     }
   };
 

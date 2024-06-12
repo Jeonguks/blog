@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import LoginModal from "./LoginModal";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const HeaderDiv = styled.div`
@@ -24,27 +22,19 @@ const Nav = styled.div`
 `;
 
 const Header = () => {
-    const [modalIsOpen, setIsOpen] = useState(false);
-    function openModal(){
-        setIsOpen(true)
-    }
-    function closeModal(){
-        setIsOpen(false)
-    }
   return (
     <>
-        <HeaderDiv>
+      <HeaderDiv>
         <Nav>
-            <a href="#" onClick={openModal}>Login</a>
-            <Link to={'/write'}>Posting</Link>
+          <Link to={"/login"}>Login</Link>
+          <Link to={"/write"}>Posting</Link>
         </Nav>
         <Nav>
-            <Link to={'/'}>Home</Link>
-            <Link to={'/about'}>About</Link>
-            <Link to={'/list'}>Post</Link>
+          <Link to={"/"}>Home</Link>
+          <Link to={"/about"}>About</Link>
+          <Link to={"/post"}>Post</Link>
         </Nav>
-        </HeaderDiv>
-        <LoginModal modalIsOpen={modalIsOpen} closeModal={closeModal}/>
+      </HeaderDiv>
     </>
   );
 };
