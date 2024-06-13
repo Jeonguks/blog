@@ -18,6 +18,7 @@ interface Post {
 type PostAction =
   | { type: "INIT"; data: Post[] }
   | { type: "CREATE"; data: Post }
+  | { type: "UPDATE"; data: Post }
   | { type: "DELETE"; id: number };
 
 function reducer(state: Post[], action: PostAction): Post[] {
@@ -31,6 +32,11 @@ function reducer(state: Post[], action: PostAction): Post[] {
       break;
     case "DELETE":
       nextState = state.filter((item) => item.postId !== action.id);
+      break;
+    case "UPDATE":
+      nextState = state.map((post) =>
+        post.postId === action.data.postId ? { ...post, ...action.data } : post
+      );
       break;
     default:
       return state;

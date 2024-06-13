@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { usePosts,usePostDispatch } from "../stores/PostContext";
+import { usePosts, usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
 
 const TitleWrapper = styled.div`
@@ -27,19 +27,22 @@ const PostPage = () => {
   if (!posts) {
     return <h1>데이터를 불러오는 중입니다...</h1>;
   }
- 
+
   const filteredData = posts.filter(
     (post) => post.postId === Number(params.postId)
   );
 
   const handleDelete = () => {
     if (filteredData.length > 0) {
-      if(confirm("게시물을 정말로 삭제하시겠습니까?")){
-      dispatch({ type: "DELETE", id: filteredData[0].postId });
-      alert("게시글이 삭제 완료 되었습니다.")
-      nav("/post")
+      if (confirm("게시물을 정말로 삭제하시겠습니까?")) {
+        dispatch({ type: "DELETE", id: filteredData[0].postId });
+        alert("게시글이 삭제 완료 되었습니다.");
+        nav("/post");
       }
     }
+  };
+  const handleEdit = () => {
+    nav(`/edit/${params.postId}`);
   };
 
   return (
@@ -52,6 +55,7 @@ const PostPage = () => {
               filteredData[0].postDate
             ).toLocaleString()}`}</small>
             <button onClick={handleDelete}>게시글 삭제하기</button>
+            <button onClick={handleEdit}>게시글 수정하기</button>
           </TitleWrapper>
           <ContentWrapper>
             <p>{filteredData[0].postContent}</p>

@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { usePostDispatch } from "../stores/PostContext";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
 
 const FormTag = styled.form`
   display: flex;
@@ -18,6 +19,7 @@ const TextareaTag = styled.textarea`
 `;
 
 const Form = () => {
+  const nav = useNavigate();
   let idRef = Number(localStorage.getItem("POSTID"));
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
@@ -40,12 +42,16 @@ const Form = () => {
 
     dispatch({ type: "CREATE", data: newPost });
     alert("작성완료!");
-    idRef+=1;
-    localStorage.setItem("POSTID",String(idRef))
     setPostTitle("");
-    setPostContent("")
+    setPostContent("");
+    nav(`/post/${idRef}`);
+    idRef += 1;
+    localStorage.setItem("POSTID", String(idRef));
   };
-
+  const discardHandler = () => {
+    if (confirm("글 작성을 취소 하시겠습니까?")) alert("취소되었습니다.");
+    nav(-1);
+  };
   return (
     <FormTag onSubmit={onSubmit}>
       <InputTag
@@ -62,6 +68,7 @@ const Form = () => {
         required
       />
       <button type="submit">작성완료!</button>
+      <button onClick={discardHandler}>취소하기</button>
     </FormTag>
   );
 };
