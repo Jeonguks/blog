@@ -50,8 +50,7 @@ const EditPage = () => {
       type: "UPDATE", 
       data: updatedPost
     });
- 
-
+    
     alert("수정완료!");
     setPostTitle("");
     setPostContent("");

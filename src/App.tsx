@@ -10,24 +10,39 @@ import PostPage from "./page/PostPage.tsx";
 import TestPage from "./page/TestPage.tsx";
 import LoginPage from "./page/LoginPage.tsx";
 import EditPage from "./page/EditPage.tsx";
+import Footer from "./component/Footer.tsx";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  height: auto;
+  min-height: 100%;
+  padding-bottom: 60px;
+`;
+const Main = styled.div`
+  min-height: 600px;
+`;
 
 function App() {
   return (
     <>
       <Header />
-      <PostProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/write" element={<PostingPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/post" element={<PostListPage />} />
-          <Route path="/post/:postId" element={<PostPage />} />
-          <Route path="/edit/:postId" element={<EditPage />} />
-          <Route path="/test" element={<TestPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </PostProvider>
+      <Main>
+        <PostProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/write" element={<PostingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/post" element={<PostListPage />} />
+            <Route path="/post/:postId" element={<PostPage />} />
+            <Route path="/edit/:postId" element={<EditPage />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </PostProvider>
+      </Main>
+      <Wrapper />
+      <Footer />
     </>
   );
 }
