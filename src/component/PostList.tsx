@@ -1,49 +1,43 @@
-import { usePosts } from "../stores/PostContext"; // Updated import
+import { useEffect, useState } from "react";
+import { getAllPosts } from "../stores/db"
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
-const PostListWrapper = styled.div`
-  display: flex;
-  justify-content: center;
+const ListWrapper = styled.ul`
+  list-style-type: none;
+  padding: 0;
 `;
 
-const PostContentDiv = styled.div`
-  display: flex;
-  flex-direction: column;
+const ListItem = styled.li`
+  margin-bottom: 10px;
+  padding: 10px;
   border: 1px solid #ccc;
-  width: 700px;
-  height: 130px;
-  margin: 10px 0px;
-  justify-content: space-between;
-  & > * {
-    margin: 5px;
-  }
-  & > a > h3 {
-    margin: 0px;
-  }
+  border-radius: 5px;
 `;
+
+interface Post {
+  id?: number;
+  content: string;
+}
 
 const PostList = () => {
-  const posts = usePosts();
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  if (!posts) {
-    return <div>데이터를 불러오는 중입니다...</div>;
-  }
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  const loadPosts = () => {
+    getAllPosts().then((posts) => {
+      setPosts(posts);
+    });
+  };
 
   return (
-    <PostListWrapper>
-      <ul>
-        {posts.map((post) => (
-          <PostContentDiv key={post.postId}>
-            <Link to={`/post/${post.postId}`}>
-              <h3>{post.postTitle}</h3>
-            </Link>
-            <p>{post.postContent}</p>
-            <small>{`작성일: ${new Date(post.postDate).toLocaleString()}`}</small>
-          </PostContentDiv>
-        ))}
-      </ul>
-    </PostListWrapper>
+    <ListWrapper>
+      {posts.map((post) => (
+        <ListItem key={post.id}>{post.content}</ListItem>
+      ))}
+    </ListWrapper>
   );
 };
 

@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { Link,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { BsFillHouseFill, BsFillPersonFill, BsPostcardFill, BsSearch } from "react-icons/bs";
 
 const HeaderDiv = styled.div`
   display: flex;
   text-align: center;
-  background-color: skyblue;
   width: 100%;
-  height: 70px;
+  height: 40px;
+  padding: 10px 0px;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #ccc;
 `;
 const Nav = styled.div`
   display: flex;
@@ -17,7 +19,11 @@ const Nav = styled.div`
   height: 50%;
   width: auto;
   margin: 0px 15px;
-  gap: 5px;
+  gap: 20px;
+& > *:hover{
+  cursor: pointer;
+}
+
 `;
 
 const Header = () => {
@@ -26,15 +32,12 @@ const Header = () => {
     <>
       <HeaderDiv>
         <Nav>
-          <button onClick={()=>(nav("/login"))}>Login</button>
-          <Link to={"/write"}>Posting</Link>
+          <BsFillPersonFill onClick={()=>(nav("/login"))}/>
         </Nav>
         <Nav>
-          <Link to={"/"}>Home</Link>
-          <Link to={"/about"}>About</Link>
-          <Link to={"/post"}>Post</Link>
-          <Link to={"/post"}>Search</Link>
-          <button>햄버거</button>
+          <BsFillHouseFill onClick={()=>(nav("/"))} />
+          <BsPostcardFill onClick={()=>(nav("/post"))}/>
+          <BsSearch/>
         </Nav>
       </HeaderDiv>
     </>
