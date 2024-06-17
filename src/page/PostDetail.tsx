@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Showdown from "showdown";
 import { getPostById } from "../stores/db";
+import "./PostDetail.css";
 
 const PostDetail = () => {
   const [content, setContent] = useState("");
@@ -22,7 +23,14 @@ const PostDetail = () => {
   }, [postId, nav]);
 
   // content가 변경될 때마다 HTML을 새로 만들어서 반환.
-  return <div dangerouslySetInnerHTML={{ __html: sd.makeHtml(content) }} />;
+  return (
+    <div className="post-wrapper">
+      <div
+        className="post-detail"
+        dangerouslySetInnerHTML={{ __html: sd.makeHtml(content) }}
+      />
+    </div>
+  );
 };
 
 export default PostDetail;

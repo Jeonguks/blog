@@ -33,6 +33,7 @@ const Header = () => {
       <HeaderDiv>
         <Nav>
           <BsFillPersonFill onClick={()=>(nav("/login"))}/>
+          <span>Jeonguk's blog</span>
         </Nav>
         <Nav>
           <BsFillHouseFill onClick={()=>(nav("/"))} />

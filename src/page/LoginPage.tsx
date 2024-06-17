@@ -17,7 +17,7 @@ const InputWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius:5px;
     padding: 10px;
-    width: 130px;
+    width: 170px;
     margin: 3px;
   }
 `;
@@ -25,7 +25,7 @@ const Button = styled.button`
   background-color: skyblue;
   color: #fff;
   border: none;
-  width: 150px;
+  width: 190px;
   padding: 10px;
   height: 40px;
   border-radius:5px;

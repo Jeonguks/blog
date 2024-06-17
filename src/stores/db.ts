@@ -1,4 +1,3 @@
-// db.ts
 const DB_NAME = "PostsDB";
 const DB_VERSION = 1;
 const STORE_NAME = "posts";
